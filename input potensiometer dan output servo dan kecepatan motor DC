@@ -1,0 +1,53 @@
+#include <Servo.h>
+Servo myservo;
+const int ledPWM1 = 11;
+const int ledPWM2 = 10;
+const int ledPWM3 = 9;
+const int button1=13;
+const int button2=12;
+int statebutton1=0;
+int statebutton2=0;
+int motorPin = 3;
+
+
+void setup(){
+  	myservo.attach(6);
+  	pinMode (button1, INPUT);
+  	pinMode (button2, INPUT);
+    pinMode(ledPWM1,OUTPUT);
+    pinMode(ledPWM2,OUTPUT);
+    pinMode(ledPWM3,OUTPUT);    
+  	pinMode(motorPin, OUTPUT);
+}
+
+void loop(){
+  int nilai = analogRead(A0);
+  int pwm = map(nilai,   0,  1023, 0, 255);
+  int pos = map(nilai,   0,  1023, 0, 180);
+  
+  statebutton1=digitalRead (button1);
+   if (statebutton1==HIGH){
+     analogWrite (ledPWM2, pwm);
+     analogWrite(motorPin, pwm);
+   }
+  else{
+     analogWrite (ledPWM2, 0);
+     analogWrite(motorPin, 0);
+   }
+  
+  statebutton2=digitalRead(button2);
+  if (statebutton2==HIGH) {
+    analogWrite (ledPWM3, pwm);
+    myservo.write(pos);
+  }
+  else{
+    analogWrite (ledPWM3, 0);
+    myservo.write(0);
+  }
+  
+  if (statebutton1==LOW && statebutton2==LOW) {
+  digitalWrite (ledPWM1, HIGH);
+  digitalWrite (ledPWM2, LOW);
+  digitalWrite (ledPWM3, LOW);
+  }
+}
